@@ -16,10 +16,9 @@ class GameCollectionController extends Controller
      */
     public function index()
     {
-        $game_collec = new GameCollection();
-        $results = $game_collec->getAllCollectionByGame(1);
-        $results2 = $game_collec->getUserByGame(1);
-        return view('collection.index');
+        $game_collec = GameCollection::all();
+
+        return view('collection.index',compact('game_collec'));
     }
 
     /**

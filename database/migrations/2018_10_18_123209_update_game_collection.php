@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCollectionsTable extends Migration
+class UpdateGameCollection extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateCollectionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('collections', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+
+        Schema::table('game_collection',function(Blueprint $table){
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('restrict')
+                ->onUpdate('restrict');
         });
     }
 
@@ -26,6 +28,8 @@ class CreateCollectionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collections');
+        Schema::table('game', function (Blueprint $table) {
+            //
+        });
     }
 }

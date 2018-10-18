@@ -15,7 +15,7 @@ class CreateGameCollectionsTable extends Migration
     {
         Schema::create('game_collection', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->nullable();
+            $table->integer('user_id')->unsigned();
             $table->integer('game_id')->unsigned();
             $table->timestamps();
         });

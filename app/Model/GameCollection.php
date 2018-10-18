@@ -25,7 +25,7 @@ class GameCollection extends Model
     protected $etat;
 
     public function modelGame(){
-        return $this->belongsToMany(ModelGame::class);
+        return $this->belongsToMany(ModelGame::class,'game_collection','id','game_id');
     }
 
     /**
