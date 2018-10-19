@@ -11,4 +11,4 @@
         Pas de jeux
     @endforelse
     </table>
-@endsection
+@stop

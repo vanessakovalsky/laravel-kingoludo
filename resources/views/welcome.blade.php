@@ -62,13 +62,18 @@
                 margin-bottom: 30px;
             }
         </style>
+        <script src="{{asset('js/app.js')}}"></script>
+
     </head>
     <body>
 
         <div class="flex-center position-ref full-height">
-            @yield('menu')
-        @if (Route::has('login'))
-                <div class="top-right links">
+            <div class="top-right links">
+                <span>Bienvenue sur KingLudo</span>
+            @component('menu')
+                @endcomponent
+
+            @if (Route::has('login'))
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
                     @else
@@ -78,13 +83,26 @@
                             <a href="{{ route('register') }}">Register</a>
                         @endif
                     @endauth
-                </div>
             @endif
+            </div>
+            <div id="demo" class="col-osm-12">
+                <example-component></example-component>
 
+                Un message super sympa : @{{ message }}
+                <input v-model="message" placeholder="Mon super message dynamique" />
+            </div>
             <div class="content">
                 @yield('content')
-                Bienvenue sur KingLudo
             </div>
         </div>
     </body>
+    <script>
+
+        vm = new Vue({
+            el: '#demo',
+            data: {
+                message: 'Message par défaut'
+            }
+        });
+    </script>
 </html>
