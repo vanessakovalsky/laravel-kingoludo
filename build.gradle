@@ -34,5 +34,5 @@ task test(type:Exec) {
     './vendor/phpunit/phpunit/phpunit' \
     --configuration='./phpunit.xml' \
     --log-junit='./logs/unitreport.xml'\
-    ./project/tests"
+    ./tests"
 }
