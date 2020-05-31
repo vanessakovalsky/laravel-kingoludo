@@ -40,7 +40,7 @@ task test(type:Exec) {
 task packageDistribution(type: Zip, dependsOn: test) {
     def tarfile = "application-1.0"
 
-    archiveFileName = tarfile + ".zip"
+    def archiveFileName = tarfile + ".zip"
     destinationDirectory = file("project/build")
 
     from ('./app') { into 'app' }
