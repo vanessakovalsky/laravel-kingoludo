@@ -38,7 +38,7 @@ task test(type:Exec) {
 }
 
 task packageDistribution(type: Zip, dependsOn: test) {
-    destinationDirectory = file("./build")
+    destinationDirectory = file("./")
     from ('./app') { into 'app' }
     from ('./bootstrap') { into 'bootstrap' }
     from ('./config') { into 'config' }
