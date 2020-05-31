@@ -1,0 +1,81 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.org.swissphpfriends:php-build-plugin:0.1-SNAPSHOT"
+  }
+}
+
+apply plugin: "org.hasnat.php-build-plugin"
+apply plugin: "distribution"
+apply plugin: "maven-publish"
+
+def majorVersion = System.getenv("MAJOR_VERSION") ?: "1"
+def minorVersion = System.getenv("MINOR_VERSION") ?: "0"
+version = majorVersion + "." + minorVersion 
+
+task purge(type:Delete) {
+  //println 'Cleaning up old files'
+  delete 'vendor', 'logs', 'build'
+}
+
+task installDeps(type: org.swissphpfriends.gradle.task.ComposerInstall) {
+    workingDirectory = "./project"
+    doNotUpdatePhar = true
+}
+
+task test(type:Exec, dependsOn: installDeps) {
+  //println 'Executing tests'
+  executable 'sh'
+  args '-c', "php \
+    './project/vendor/phpunit/phpunit/phpunit' \
+    --configuration='./project/phpunit.xml' \
+    --log-junit='./logs/unitreport.xml'\
+    ./project/tests"
+}
+
+def tarfile = "application-" + version
+task packageDistribution(type: Zip, dependsOn: test) {
+    archiveFileName = tarfile + ".zip"
+    destinationDirectory = file("project/build")
+
+    from ('project/app') { into 'app' }
+    from ('project/bootstrap') { into 'bootstrap' }
+    from ('project/config') { into 'config' }
+      from ('project/database') { into 'database' }
+      from ('project/nbproject') { into 'nbproject' }
+      from ('project/public') { into 'public' }
+      from ('project/resources') { into 'resources' }
+      from ('project/storage') {
+        into 'storage'
+        dirMode 0775
+      }
+      from ('project/vendor') { into 'vendor' }
+      from { 'project/server.php' }
+}
+
+group = 'laravel-kingoludo'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifact source: packageDistribution, extension: 'zip'
+        }
+    }
+    repositories {
+        maven {
+            //credentials {
+            //    username nexusUsername
+            //    password nexusPassword
+            //}
+            url nexusRepo
+        }
+    }
+}
+
+assemble.dependsOn packageDistribution
+   build.dependsOn assemble
+ publish.dependsOn build
