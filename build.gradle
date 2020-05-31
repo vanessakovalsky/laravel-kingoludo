@@ -37,8 +37,9 @@ task test(type:Exec) {
     ./project/tests"
 }
 
-def tarfile = "application-1.0"
 task packageDistribution(type: Zip, dependsOn: test) {
+    def tarfile = "application-1.0"
+
     archiveFileName = tarfile + ".zip"
     destinationDirectory = file("project/build")
 
