@@ -35,7 +35,7 @@ task test(type:Exec) {
     --configuration='./phpunit.xml' \
     --log-junit='./build/reports/unitreport.xml'\
     --testsuite Unit \
-    ./tests"
+    ./tests/Unit"
 }
 
 task phploc(type: Exec, description: 'Measure project size using PHPLOC') {
