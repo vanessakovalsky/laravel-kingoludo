@@ -27,7 +27,12 @@ task installDeps(type: org.swissphpfriends.gradle.task.ComposerInstall, dependsO
     doNotUpdatePhar = true
 }
 
-task test(type:Exec) {
+task keyGenerate(type:Exec){
+    executable 'sh'
+    args '-c','php artisan key:generate'
+}
+
+task test(type:Exec, dependsOn: keyGenerate) {
   //println 'Executing tests'
   executable 'sh'
   args '-c', "php \
