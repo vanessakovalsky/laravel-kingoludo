@@ -20,6 +20,9 @@ version = majorVersion + "." + minorVersion
 task purge(type:Delete) {
   //println 'Cleaning up old files'
   delete 'vendor', 'logs', 'build'
+  doLast {
+	file('build/reports').mkdirs()
+  }
 }
 
 task installDeps(type: org.swissphpfriends.gradle.task.ComposerInstall, dependsOn: purge) {
@@ -34,7 +37,6 @@ task test(type:Exec) {
     './vendor/phpunit/phpunit/phpunit' \
     --configuration='./phpunit.xml' \
     --log-junit='./build/reports/unitreport.xml'\
-    --testsuite Unit \
     ./tests/Unit"
 }
 
@@ -57,7 +59,7 @@ task phpmd (type : Exec, description : "Perform project mess detection using PHP
 task phpcpd (type : Exec, description : "Find duplicate code using PHPCPD and log result in XML format."){
 	executable 'sh'
 	args '-c',"/home/ubuntu/tools/phpcpd \
-    --log-pmd './pmd-cpd.xml' \
+    --log-pmd './build/reports/pmd-cpd.xml' \
     ./app"
 }
 
@@ -65,7 +67,7 @@ task phpcs (type : Exec, description : "Find Coding Standard Violations using PH
 	executable 'sh'
 	args '-c',"/home/ubuntu/tools/phpcs \
     --report=checkstyle \
-    --report-file='./checkstyle.xml' \
+    --report-file='./build/reports/checkstyle.xml' \
     --standard=PSR2 \
     --extensions=php \
     --ignore=autoload.php \
