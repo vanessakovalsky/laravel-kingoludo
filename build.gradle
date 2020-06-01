@@ -14,7 +14,7 @@ apply plugin: "distribution"
 apply plugin: "maven-publish"
 
 def env = System.getenv()
-versionName "1." + env['BUILD_NUMBER']
+version = "1." + env['BUILD_NUMBER']
 
 task purge(type:Delete) {
   //println 'Cleaning up old files'
