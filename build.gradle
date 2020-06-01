@@ -82,7 +82,7 @@ task phpdox (type : Exec, description : "Generating Docs enriched with pmd, chec
     -f ./phpdox.xml"
 }
 
-task packageDistribution(type: Zip, dependsOn: test) {
+task packageDistribution(type: Zip) {
     from ('./app') { into 'app' }
     from ('./bootstrap') { into 'bootstrap' }
     from ('./config') { into 'config' }
