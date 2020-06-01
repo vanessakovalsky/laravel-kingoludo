@@ -123,3 +123,10 @@ publishing {
 assemble.dependsOn packageDistribution
    build.dependsOn assemble
  publish.dependsOn build
+ 
+ 
+sonarqube {
+    properties {
+        property "sonar.source", "./app"
+    }
+}
