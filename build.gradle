@@ -13,10 +13,6 @@ apply plugin: "org.hasnat.php-build-plugin"
 apply plugin: "distribution"
 apply plugin: "maven-publish"
 
-def majorVersion = System.getenv("MAJOR_VERSION") ?: "1"
-def minorVersion = System.getenv("MINOR_VERSION") ?: "0"
-version = majorVersion + "." + minorVersion 
-
 task purge(type:Delete) {
   //println 'Cleaning up old files'
   delete 'vendor', 'logs', 'build'
