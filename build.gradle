@@ -60,8 +60,7 @@ task phpmd (type : Exec, description : "Perform project mess detection using PHP
 task phpcpd (type : Exec, description : "Find duplicate code using PHPCPD and log result in XML format."){
 	executable 'sh'
 	args '-c',"/home/ubuntu/tools/phpcpd \
-    --reportfile ='./build/reports/phpmd.xml' \
-    --log-pmd = './build/reports/pmd-cpd.xml' \
+    --log-pmd './pmd-cpd.xml' \
     ./app"
 }
 
