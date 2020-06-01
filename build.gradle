@@ -83,8 +83,8 @@ task phpdox (type : Exec, description : "Generating Docs enriched with pmd, chec
 }
 
 task packageDistribution(type: Zip, dependsOn: test) {
-    destinationDirectory = file("project/build")
-    archiveFileName = "my-distribution.zip"
+    destinationDirectory(file("./build"))
+    archiveFileName "my-distribution.zip"
 
     from ('project/app') { into 'app' }
     from ('project/bootstrap') { into 'bootstrap' }
