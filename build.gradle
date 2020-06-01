@@ -83,22 +83,21 @@ task phpdox (type : Exec, description : "Generating Docs enriched with pmd, chec
 }
 
 task packageDistribution(type: Zip, dependsOn: test) {
-    destinationDirectory(file("./build"))
-    archiveFileName "my-distribution.zip"
-
-    from ('project/app') { into 'app' }
-    from ('project/bootstrap') { into 'bootstrap' }
-    from ('project/config') { into 'config' }
-      from ('project/database') { into 'database' }
-      from ('project/nbproject') { into 'nbproject' }
-      from ('project/public') { into 'public' }
-      from ('project/resources') { into 'resources' }
-      from ('project/storage') {
-        into 'storage'
-        dirMode 0775
-      }
-      from ('project/vendor') { into 'vendor' }
-      from { 'project/server.php' }
+    from ('./app') { into 'app' }
+    from ('./bootstrap') { into 'bootstrap' }
+    from ('./config') { into 'config' }
+    from ('./database') { into 'database' }
+    from ('./nbproject') { into 'nbproject' }
+    from ('./public') { into 'public' }
+    from ('./resources') { into 'resources' }
+    from ('./storage') {
+      into 'storage'
+      dirMode 0775
+    }
+    from ('./vendor') { into 'vendor' }
+    from { './server.php' }
+    destinationDirectory = file("./build")
+    archiveFileName = "my-distribution.zip"
 }
 
 group = 'laravel-kingoludo'
