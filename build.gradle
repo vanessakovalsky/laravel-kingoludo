@@ -67,7 +67,7 @@ task phpcs (type : Exec, description : "Find Coding Standard Violations using PH
     --reportfile ='./build/reports/checkstyle.xml' \
     --standard=PSR2' \
     --extensions=php \
-    --ignore=autoload.php
+    --ignore=autoload.php \
     ./"
 }
 
