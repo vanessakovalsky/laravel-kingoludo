@@ -12,6 +12,8 @@ buildscript {
 apply plugin: "org.hasnat.php-build-plugin"
 apply plugin: "distribution"
 apply plugin: "maven-publish"
+apply plugin: "org.sonarqube"
+
 
 def env = System.getenv()
 version = "1." + env['BUILD_NUMBER']
