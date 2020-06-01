@@ -97,7 +97,6 @@ task packageDistribution(type: Zip, dependsOn: test) {
     from ('./vendor') { into 'vendor' }
     from { './server.php' }
     destinationDirectory = file("./build")
-    archiveFileName = "my-distribution.zip"
 }
 
 group = 'laravel-kingoludo'
