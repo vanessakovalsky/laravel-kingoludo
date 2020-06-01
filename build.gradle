@@ -55,8 +55,7 @@ task phpmd (type : Exec, description : "Perform project mess detection using PHP
 	args '-c',"/home/ubuntu/tools/phpmd ./app \
     xml './phpmd.xml' \
     --reportfile './build/reports/phpmd.xml'\
-    --runtime-set ignore_errors_on_exit 1 \
-    --runtime-set ignore_warnings_on_exit 1"
+    --ignore-violations-on-exit"
 }
 
 task phpcpd (type : Exec, description : "Find duplicate code using PHPCPD and log result in XML format."){
