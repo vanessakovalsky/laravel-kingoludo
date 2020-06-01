@@ -84,7 +84,7 @@ task phpdox (type : Exec, description : "Generating Docs enriched with pmd, chec
 
 def tarfile = "application-" + version
 task packageDistribution(type: Zip, dependsOn: test) {
-    archiveFileName = tarfile + ".zip"
+    archiveFileName = "application-1.0.zip"
     destinationDirectory = file("project/build")
 
     from ('project/app') { into 'app' }
