@@ -6,7 +6,7 @@
         </collector>
 
         <generator output="${basedir}/reports/api">
-            <enrich base="${basedir}/reports">
+            <enrich base="${basedir}/build/reports">
                 <source type="build" />
                 <source type="checkstyle" />
                 <source type="pmd" />
