@@ -109,10 +109,10 @@ publishing {
     }
     repositories {
         maven {
-            //credentials {
-            //    username nexusUsername
-            //    password nexusPassword
-            //}
+            credentials {
+                username nexusUsername
+                password nexusPassword
+            }
             url nexusRepo
         }
     }
