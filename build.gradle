@@ -53,7 +53,7 @@ task phploc(type: Exec, description: 'Measure project size using PHPLOC') {
 task phpmd (type : Exec, description : "Perform project mess detection using PHPMD, and Creating a log file for the Continuous Integration Server"){
 	executable 'sh'
 	args '-c',"/home/ubuntu/tools/phpmd ./app \
-    xml ='./build/phpmd.xml' \
+    xml ='./phpmd.xml' \
     --reportfile = './build/reports/phpmd.xml'"
 }
 
