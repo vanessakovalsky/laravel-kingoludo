@@ -68,7 +68,7 @@ task phpcs (type : Exec, description : "Find Coding Standard Violations using PH
     --standard=PSR2 \
     --extensions=php \
     --ignore=autoload.php \
-    ./app"
+    ./app/"
 }
 
 task phpdox (type : Exec, description : "Generating Docs enriched with pmd, checkstyle, phpcs,phpunit,phploc"){
