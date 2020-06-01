@@ -42,12 +42,12 @@ task phploc(type: Exec, description: 'Measure project size using PHPLOC') {
 	args '-c',"/home/ubuntu/tools/phploc --count-tests \
     --log-csv ='./build/reports/phploc.csv' \
     --log-xml = './build/reports/phploc.xml' \
-     ./"
+     ./app"
 }
 
 task phpmd (type : Exec, description : "Perform project mess detection using PHPMD, and Creating a log file for the Continuous Integration Server"){
 	executable 'sh'
-	args '-c',"/home/ubuntu/tools/phpmd ./ \
+	args '-c',"/home/ubuntu/tools/phpmd ./app \
     xml ='./build/phpmd.xml' \
     --reportfile = './build/reports/phpmd.xml'"
 }
@@ -57,7 +57,7 @@ task phpcpd (type : Exec, description : "Find duplicate code using PHPCPD and lo
 	args '-c',"/home/ubuntu/tools/phpcpd \
     --reportfile ='./build/reports/phpmd.xml' \
     --log-pmd = './build/reports/pmd-cpd.xml' \
-    ./"
+    ./app"
 }
 
 task phpcs (type : Exec, description : "Find Coding Standard Violations using PHP_CodeSniffer"){
@@ -68,7 +68,7 @@ task phpcs (type : Exec, description : "Find Coding Standard Violations using PH
     --standard=PSR2 \
     --extensions=php \
     --ignore=autoload.php \
-    ./"
+    ./app"
 }
 
 task phpdox (type : Exec, description : "Generating Docs enriched with pmd, checkstyle, phpcs,phpunit,phploc"){
