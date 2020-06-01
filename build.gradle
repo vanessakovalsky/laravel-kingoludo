@@ -81,5 +81,5 @@ task phpcs (type : Exec, description : "Find Coding Standard Violations using PH
 task phpdox (type : Exec, description : "Generating Docs enriched with pmd, checkstyle, phpcs,phpunit,phploc"){
 	executable 'sh'
 	args '-c',"/home/ubuntu/tools/phpdox \
-    -f build/phpdox.xml"
+    -f ./phpdox.xml"
 }
