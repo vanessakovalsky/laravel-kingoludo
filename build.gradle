@@ -64,8 +64,8 @@ task phpcs (type : Exec, description : "Find Coding Standard Violations using PH
 	executable 'sh'
 	args "/home/ubuntu/tools/phpcs \
     --report=checkstyle \
-    --reportfile ='./build/reports/checkstyle.xml' \
-    --standard=PSR2' \
+    --report-file='./build/reports/checkstyle.xml' \
+    --standard=PSR2 \
     --extensions=php \
     --ignore=autoload.php \
     ./"
