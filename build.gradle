@@ -13,18 +13,11 @@ task purge(type:Delete) {
   delete 'vendor', 'logs', 'build/*.zip'
 }
 
-task composer(type:Exec, dependsOn: purge) {
-  //println 'Setting up dependencies'
-  executable 'sh'
-  args '-c', 'php -r "readfile(\'https://getcomposer.org/installer\');" | php'
-  standardOutput = new ByteArrayOutputStream()
-  ext.output = { return standardOutput.toString() }
-}
 
-task vendor(type:Exec, dependsOn: composer) {
+task vendor(type:Exec, dependsOn: purge) {
   //println 'Installing dependencies'
   executable 'sh'
-  args '-c', 'php composer.phar install'
+  args '-c', 'composer update'
   standardOutput = new ByteArrayOutputStream()
   ext.output = { return standardOutput.toString() }
 }
