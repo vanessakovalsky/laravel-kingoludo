@@ -41,7 +41,7 @@ task test(type:Exec, dependsOn: vendor) {
 
 
 def tarfile = "project-" + version
-task packageDistribution(type: Zip, dependsOn: vendor) {
+task packageDistribution(type: Zip, dependsOn: test) {
     from ('app') { into 'app' }
     from ('bootstrap') { into 'bootstrap' }
     from ('config') { into 'config' }
