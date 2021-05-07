@@ -1,133 +1,87 @@
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "gradle.plugin.org.swissphpfriends:php-build-plugin:0.1-SNAPSHOT"
-    classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
-  }
+plugins {
+  id "org.hasnat.php-build-plugin" version "0.1-SNAPSHOT"
+  id "distribution"
+  id "maven-publish"
 }
 
-apply plugin: "org.hasnat.php-build-plugin"
-apply plugin: "distribution"
-apply plugin: "maven-publish"
-apply plugin: "org.sonarqube"
-
-
-def env = System.getenv()
-version = "1." + env['BUILD_NUMBER']
+def majorVersion = System.getenv("MAJOR_VERSION") ?: "1"
+def minorVersion = System.getenv("MINOR_VERSION") ?: "0"
+version = majorVersion + "." + minorVersion 
 
 task purge(type:Delete) {
   //println 'Cleaning up old files'
-  delete 'vendor', 'logs', 'build'
-  doLast {
-	file('build/reports').mkdirs()
-  }
+  delete 'vendor', 'logs', 'build/*.zip'
 }
 
-task installDeps(type: org.swissphpfriends.gradle.task.ComposerInstall, dependsOn: purge) {
-    workingDirectory = "./"
-    doNotUpdatePhar = true
+task composer(type:Exec, dependsOn: purge) {
+  //println 'Setting up dependencies'
+  executable 'sh'
+  args '-c', 'php -r "readfile(\'https://getcomposer.org/installer\');" | php'
+  standardOutput = new ByteArrayOutputStream()
+  ext.output = { return standardOutput.toString() }
 }
 
-task test(type:Exec) {
+task vendor(type:Exec, dependsOn: composer) {
+  //println 'Installing dependencies'
+  executable 'sh'
+  args '-c', 'php composer.phar install'
+  standardOutput = new ByteArrayOutputStream()
+  ext.output = { return standardOutput.toString() }
+}
+
+task test(type:Exec, dependsOn: vendor) {
   //println 'Executing tests'
   executable 'sh'
   args '-c', "php \
-    './vendor/phpunit/phpunit/phpunit' \
+    './vendor/bin/phpunit' \
     --configuration='./phpunit.xml' \
-    --log-junit='./build/reports/unitreport.xml'\
-    ./tests/Unit"
+    --log-junit='./logs/unitreport.xml'\
+    ./tests"
 }
 
-task phploc(type: Exec, description: 'Measure project size using PHPLOC') {
-	executable 'sh'
-	args '-c',"/home/ubuntu/tools/phploc --count-tests \
-    --log-csv='./build/reports/phploc.csv' \
-    --log-xml='./build/reports/phploc.xml' \
-     ./app"
+
+def tarfile = "project-" + version
+task packageDistribution(type: Zip, dependsOn: vendor) {
+    from ('app') { into 'app' }
+    from ('bootstrap') { into 'bootstrap' }
+    from ('config') { into 'config' }
+    from ('database') { into 'database' }
+    from ('nbproject') { into 'nbproject' }
+    from ('public') { into 'public' }
+    from ('resources') { into 'resources' }
+    from ('storage') {
+        into 'storage'
+        dirMode 0775
+      }
+    from ('vendor') { into 'vendor' }
+    from { 'server.php' }
+    archiveFileName = tarfile + ".zip"
+    destinationDirectory = file("build")
 }
 
-task phpmd (type : Exec, description : "Perform project mess detection using PHPMD, and Creating a log file for the Continuous Integration Server"){
-	executable 'sh'
-	args '-c',"/home/ubuntu/tools/phpmd ./app \
-    xml './phpmd.xml' \
-    --reportfile './build/reports/phpmd.xml'\
-    --ignore-violations-on-exit"
+task up(type:Exec, dependsOn: packageDistribution) {
+  executable 'sh'
+  args '-c', 'curl -v --user "admin:Formation2021*" --upload-file build/application-1.0.zip http://192.168.1.12:8081/repository/ArchiveZip/application-php/project/1.0/application-1.0.zip'
+  standardOutput = new ByteArrayOutputStream()
+  ext.output = { return standardOutput.toString() }
 }
 
-task phpcpd (type : Exec, description : "Find duplicate code using PHPCPD and log result in XML format."){
-	executable 'sh'
-	args '-c',"/home/ubuntu/tools/phpcpd \
-    --log-pmd './build/reports/pmd-cpd.xml' \
-    ./app"
-}
-
-task phpcs (type : Exec, description : "Find Coding Standard Violations using PHP_CodeSniffer"){
-	executable 'sh'
-	args '-c',"/home/ubuntu/tools/phpcs \
-    --report=checkstyle \
-    --report-file='./build/reports/checkstyle.xml' \
-    --standard=PSR2 \
-    --extensions=php \
-    --ignore=autoload.php \
-    --runtime-set ignore_errors_on_exit 1 \
-    --runtime-set ignore_warnings_on_exit 1 \
-    ./app/"
-}
-
-task phpdox (type : Exec, description : "Generating Docs enriched with pmd, checkstyle, phpcs,phpunit,phploc"){
-	executable 'sh'
-	args '-c',"/home/ubuntu/tools/phpdox \
-    -f ./phpdox.xml"
-}
-
-task packageDistribution(type: Zip) {
-    from ('./app') { into 'app' }
-    from ('./bootstrap') { into 'bootstrap' }
-    from ('./config') { into 'config' }
-    from ('./database') { into 'database' }
-    from ('./nbproject') { into 'nbproject' }
-    from ('./public') { into 'public' }
-    from ('./resources') { into 'resources' }
-    from ('./storage') {
-      into 'storage'
-      dirMode 0775
-    }
-    from ('./vendor') { into 'vendor' }
-    from { './server.php' }
-    destinationDirectory = file("./build")
-}
-
-group = 'laravel-kingoludo'
-
-publishing {
-    publications {
-        maven(MavenPublication) {
+  publishing {
+      publications {
+          maven(MavenPublication) {
             artifact source: packageDistribution, extension: 'zip'
-        }
-    }
-    repositories {
-        maven {
-            credentials {
-                username nexusUsername
-                password nexusPassword
-            }
-            url nexusRepo
-        }
-    }
-}
+          }
+      }
+      repositories {
+          maven {
+              url nexusRepo 
+              allowInsecureProtocol true
+              credentials {
+                  username nexusUsername
+                  password nexusPassword
+              }
+          }
+      }
 
-assemble.dependsOn packageDistribution
-   build.dependsOn assemble
- publish.dependsOn build
- 
- 
-sonarqube {
-    properties {
-        property "sonar.sources", "app"
-        property "sonar.php.tests.reportPath", "build/reports/unitreport.xml"
-    }
-}
+
+  }
