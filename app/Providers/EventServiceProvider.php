@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Listeners\LogAfterUpdate;
-use App\Events\SaveGame;
+use App\Events\JeuEnregistre;
+use App\Listeners\JeuListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -20,9 +20,8 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        SaveGame::class => [
-            LogAfterUpdate::class,
-
+        JeuEnregistre::class => [
+            JeuListener::class,
         ]
     ];
 
@@ -33,8 +32,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
-
         //
     }
 }

@@ -2,7 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Models\JeuModel;
+use App\Policies\JeuPolicy;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
+use App\Authorizations\DemoAuthorization;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -13,8 +18,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-        'App\Model\GameCollection' => 'App\Policies\GameCollectionPolicy',
+        JeuModel::class => JeuPolicy::class,
+
+        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
 
     /**
@@ -26,6 +32,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('demo', 'App\Authorizations\DemoAuthorization@demo');
+        Gate::define('test', function(User $user){
+            dd('arrive dans la gate');
+            return true;
+        });
     }
 }

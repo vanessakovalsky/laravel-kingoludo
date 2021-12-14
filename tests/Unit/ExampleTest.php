@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\TestCase;
+use App\Http\Controllers\DemoController;
 
 class ExampleTest extends TestCase
 {
@@ -12,8 +12,14 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testBasicTest()
+    public function test_example()
     {
         $this->assertTrue(true);
+    }
+
+    public function testCalcul(){
+        $result = DemoController::calcul(2,4);
+        $this->assertEquals($result, 6);
+        $this->assertNotEquals($result, 12);
     }
 }

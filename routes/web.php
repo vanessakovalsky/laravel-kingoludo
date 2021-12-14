@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\DemoController;
+use App\Models\JeuModel;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JeuController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,21 +18,22 @@
 */
 
 Route::get('/', function () {
-    return View::make('welcome');
+    return view('welcome');
+});
 
-})->middleware('auth');
-
-Route::prefix('/admin')->middleware('auth')->group(
-    function() {
-        Route::name('admin.dashboard')->get('/','AdminController@DashboardAdminAction');
-    }
-);
-
-Route::resource('/party','PartyController');
-Route::resource('/collection','GameCollectionController');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 
-Auth::routes();
+Route::resource('jeu', JeuController::class);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('jeu/create', [JeuController::class, 'create'])->middleware('auth');
+
+Route::get('/appel',[DemoController::class, 'appel']);
+
+Route::get('/user/adresse',[UserController::class,'coordonneesGPS']);
+
+require __DIR__.'/auth.php';
+
 
