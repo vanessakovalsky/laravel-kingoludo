@@ -37,6 +37,7 @@ task test(type:Exec, dependsOn: vendor) {
     --configuration='./phpunit.xml' \
     --log-junit='./logs/unitreport.xml'\
     ./tests"
+  ignoreExitValue true
 }
 
 task phploc(type: Exec, description: 'Measure project size using PHPLOC') {
