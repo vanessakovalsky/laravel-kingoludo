@@ -29,7 +29,7 @@ task vendor(type:Exec, dependsOn: composer) {
   ext.output = { return standardOutput.toString() }
 }
 
-task test(type:Exec, dependsOn: vendor) {
+task test(type:Exec) {
   //println 'Executing tests'
   executable 'sh'
   args '-c', "php \
@@ -50,7 +50,7 @@ task phploc(type: Exec, description: 'Measure project size using PHPLOC') {
 
 
 def tarfile = "project-" + version
-task packageDistribution(type: Zip, dependsOn: test) {
+task packageDistribution(type: Zip) {
     from ('app') { into 'app' }
     from ('bootstrap') { into 'bootstrap' }
     from ('config') { into 'config' }
@@ -68,7 +68,7 @@ task packageDistribution(type: Zip, dependsOn: test) {
     destinationDirectory = file("build")
 }
 
-task up(type:Exec, dependsOn: packageDistribution) {
+task up(type:Exec) {
   executable 'sh'
   args '-c', 'curl -v --user "admin:Formation2021*" --upload-file build/application-1.0.zip http://192.168.1.12:8081/repository/ArchiveZip/application-php/project/1.0/application-1.0.zip'
   standardOutput = new ByteArrayOutputStream()
