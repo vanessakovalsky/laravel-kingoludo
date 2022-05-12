@@ -25,4 +25,28 @@ pipeline {
       }
     }
   }
+  post {
+      success {
+          steps {
+              plot csvFileName: 'build/phploc.csv', 
+                    csvSeries: [[
+                                        file: 'build/phploc.csv',
+                                        exclusionValues: '',
+                                        displayTableFlag: false,
+                                        inclusionFlag: 'OFF',
+                                        url: '']],
+                    group: 'Plot Group',
+                    title: 'Plot Title',
+                    style: 'line',
+                    exclZero: false,
+                    keepRecords: false,
+                    logarithmic: false,
+                    numBuilds: '',
+                    useDescr: false,
+                    yaxis: '',
+                    yaxisMaximum: '',
+                    yaxisMinimum: ''
+          }
+      }
+    }
 }
