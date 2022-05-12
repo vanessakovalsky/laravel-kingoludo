@@ -6,7 +6,7 @@ pipeline {
         git url: 'https://github.com/vanessakovalsky/laravel-kingoludo.git'
       }
     }
-    stage('integration continue'){
+    stage('Build'){
       tools {
         gradle 'gradle'
       }
@@ -16,5 +16,12 @@ pipeline {
         sh 'gradle packageDistribution'
       }
     }
+      stage('Analyse qualité'){
+      tools {
+        gradle 'gradle'
+      }
+      steps {
+        sh 'gradle phploc'
+      }
   }
 }
