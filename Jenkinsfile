@@ -27,8 +27,7 @@ pipeline {
   }
   post {
       success {
-          steps {
-              plot csvFileName: 'build/phploc.csv', 
+        plot csvFileName: 'build/phploc.csv', 
                     csvSeries: [[
                                         file: 'build/phploc.csv',
                                         exclusionValues: '',
@@ -46,7 +45,6 @@ pipeline {
                     yaxis: '',
                     yaxisMaximum: '',
                     yaxisMinimum: ''
-          }
       }
     }
 }
