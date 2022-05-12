@@ -1,7 +1,7 @@
 FROM gradle
 RUN mkdir /home/gradle/project
 WORKDIR /home/gradle/project
-COPY ./laravel-kingoludo/ /home/gradle/project
+COPY ./ /home/gradle/project
 
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
