@@ -16,12 +16,13 @@ pipeline {
         sh 'gradle packageDistribution'
       }
     }
-      stage('Analyse qualité'){
+    stage('Analyse qualité'){
       tools {
         gradle 'gradle'
       }
       steps {
         sh 'gradle phploc'
       }
+    }
   }
 }
