@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: .docker/Dockerfile
+        image: 'shouts.dev/laravel'
+        container_name: shouts-laravel-app
+        ports:
+            - "8090:80"
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - laravel-shouts
+        depends_on:
+            - mysql
+        command: sh -c "/usr/local/bin/initscript.sh && apache2-foreground"
+    mysql:
+        image: 'mariadb:latest'
+        container_name: shouts-laravel-db
+        restart: unless-stopped
+        ports:
+            - "3310:3306"
+        environment:
+            MARIADB_DATABASE: laravel
+            MARIADB_ROOT_PASSWORD: rootpassword
+            MARIADB_PASSWORD: larapass
+            MARIADB_USER: laravel
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - laravel-shouts
+
+networks:
+    laravel-shouts:
+        driver: bridge
+
+volumes:
+    dbdata: {}
