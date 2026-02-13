@@ -1,0 +1,9 @@
+- name: Run SonarQube Scanner
+  env:
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  run: |
+    sonar-scanner \
+      -Dsonar.projectKey=mon-repo \
+      -Dsonar.sources=. \
+      -Dsonar.host.url=http://136.114.55.43:9000 \
+      -Dsonar.login=$SONAR_TOKEN
