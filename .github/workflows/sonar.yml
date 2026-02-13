@@ -19,14 +19,12 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Install SonarScanner
-        run: |
-          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.9.3.54463-linux.zip
-          unzip sonar-scanner-cli-4.9.3.54463-linux.zip
-          echo "$PWD/sonar-scanner-4.9.3.54463-linux/bin" >> $GITHUB_PATH
+      - name: SonarQube Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=mon-repo
+            -Dsonar.sources=.
+            -Dsonar.host.url=http://136.114.55.43:9000
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
-      - name: Run SonarQube Scanner
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          sonar-scanner -Dsonar.projectKey=mon-repo \
