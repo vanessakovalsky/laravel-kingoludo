@@ -1,8 +1,32 @@
-- name: Run SonarQube Scanner
-  env:
-    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  run: |
-    sonar-scanner -Dsonar.projectKey=mon-repo
-                  -Dsonar.sources=.
-                  -Dsonar.host.url=http://136.114.55.43:9000
-                  -Dsonar.login=$SONAR_TOKEN
+name: SonarQube Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install SonarScanner
+        run: |
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.9.3.54463-linux.zip
+          unzip sonar-scanner-cli-4.9.3.54463-linux.zip
+          echo "$PWD/sonar-scanner-4.9.3.54463-linux/bin" >> $GITHUB_PATH
+
+      - name: Run SonarQube Scanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner -Dsonar.projectKey=mon-repo \
